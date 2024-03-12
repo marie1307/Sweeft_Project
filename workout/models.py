@@ -33,8 +33,7 @@ class Exercise(models.Model):
     instructions = models.TextField()
     target_muscles = models.CharField(max_length=200)
     equipment_required = models.CharField(max_length=200)
-    image = models.ImageField(
-        upload_to='exercise_images/', null=True, blank=True)
+    image = models.ImageField(upload_to='exercise_images/', null=True, blank=True)
 
     def __str__(self):
         return self.title
