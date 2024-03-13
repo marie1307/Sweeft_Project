@@ -39,25 +39,53 @@ class LogoutView(generics.GenericAPIView):
 class ExercisesViewSet(viewsets.ModelViewSet):
     queryset = Exercise.objects.all()
     serializer_class = ExerciseSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        user = self.request.user
+        if user and not user.is_anonymous:
+            queryset = queryset.filter(user=user)
+        return queryset
 
 
 # General personal plan only for user
 class PersonalPlanViewSet(viewsets.ModelViewSet):
     queryset = PersonalPlan.objects.all()
     serializer_class = PersonalPlanExercise
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        user = self.request.user
+        if user and not user.is_anonymous:
+            queryset = queryset.filter(user=user)
+        return queryset
 
 
 # Personal plan per exercises only for user
 class PersonalPlanExerciseViewSet(viewsets.ModelViewSet):
     queryset = PersonalPlanExercise.objects.all()
     serializer_class = PersonalPlanExerciseSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        user = self.request.user
+        if user and not user.is_anonymous:
+            queryset = queryset.filter(user=user)
+        return queryset
 
 
 # Personal goals track only for user
 class PersonalGoalViewSet(viewsets.ModelViewSet):
     queryset = PersonalGoal.objects.all()
     serializer_class = PersonalGoalSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        user = self.request.user
+        if user and not user.is_anonymous:
+            queryset = queryset.filter(user=user)
+        return queryset

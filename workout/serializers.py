@@ -35,25 +35,30 @@ class LoginSerializer(serializers.Serializer):
                 "Must include 'username' and 'password'.")
         
         
-class ExerciseSerializer(serializers.Serializer):
+class ExerciseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exercise   
         fields = "__all__" 
 
     
-class PersonalPlanSerializer(serializers.Serializer):
+class PersonalPlanSerializer(serializers.ModelSerializer):
+    exercises = ExerciseSerializer(many=True, read_only=True)
+
     class Meta:
-        model = PersonalPlan   
-        fields = "__all__" 
+        model = PersonalPlan
+        fields = "__all__"
 
 
-class PersonalPlanExerciseSerializer(serializers.Serializer):
+class PersonalPlanExerciseSerializer(serializers.ModelSerializer):
+    exercise = ExerciseSerializer(read_only=True)
+    personal_plan = PersonalPlanSerializer(read_only=True)
+
     class Meta:
         model = PersonalPlanExercise
         fields = "__all__"
 
 
-class PersonalGoalSerializer(serializers.Serializer):
+class PersonalGoalSerializer(serializers.ModelSerializer):
     class Meta:
         model = PersonalGoal
         fields = "__all__"
