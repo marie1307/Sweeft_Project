@@ -1,4 +1,4 @@
-# Sweeft_Project
+# Personalized Workout Plan System API
 The Personalized Workout Plan System API is a RESTful service designed to help users create and manage customized workout plans, track fitness goals, and log exercise feedback. Built with Django and Django REST Framework, it supports user registration, login, and JWT-based authentication, providing a secure and scalable foundation for fitness tracking applications.
 
 ## Features
