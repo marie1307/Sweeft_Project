@@ -22,20 +22,49 @@ Ensure you have the following installed on your development machine:
 - pip (Python package installer)
 - Virtual environment (optional but recommended)
 
-### Installation
+## Setup
 
-1. **Clone the repository**
+To set up the project locally, follow these steps:
+- Clone the repository: `git clone <repository-url>`
+- Navigate to the project directory: `cd <project-folder>`
+- Set up a virtual environment (recommended):
+  python -m venv venv
+  Windows: venv\Scripts\activate
+  Unix/MacOS: source venv/bin/activate
+- Install dependencies: pip install -r requirements.txt
+- Apply migrations: python manage.py migrate
+- Create a superuser: python manage.py createsuperuser
+- Run the development server: python manage.py runserver
+- Access the admin interface at http://localhost:8000/admin to manage exercises, workout plans, etc.
 
-git clone https://your-repository-url.git
-cd your-project-directory
+### API Endpoints
 
-### Setting Up a Virtual Environment (Recommended)
+The API endpoints exposed by the application include:
 
-A virtual environment is a self-contained directory that contains a Python installation for a particular version of Python, plus a number of additional packages. Using a virtual environment allows you to manage dependencies for different projects, avoiding conflicts between package versions. Setting up a virtual environment for this project is recommended to keep your dependencies isolated from your global Python installation.
+- /api/exercises/: CRUD operations for managing exercises.
+- /api/personal_plans/: CRUD operations for managing personal workout plans.
+- /api/plan_exercises/: Manage exercises within personal plans.
+- /api/goals/: CRUD operations for managing personal fitness goals.
+- /api/registration/: User registration endpoint.
+- /api/login/: User login endpoint.
+- /api/logout/: User logout endpoint.
 
-1. **Create a Virtual Environment**
+Refer to the API documentation or viewsets in views.py for more details on available endpoints and their usage.
 
-   Navigate to your project directory and run the following command to create a virtual environment named `venv`. You can name the environment anything you like.
+### Permissions
 
-   ```bash
-   python -m venv venv
+Custom permission classes are defined in permissions.py to control access to different parts of the system. Permissions are based on user roles and ownership of resources such as personal workout plans and fitness goals.
+
+### Filters
+
+Custom filters are implemented to enable search and filtering of exercise objects based on various criteria such as difficulty level, equipment required, and target muscles.
+
+### Authentication
+
+JWT-based authentication is implemented using Django REST Framework's Simple JWT. Users can obtain a token by logging in and use it to authenticate subsequent requests to protected endpoints.
+
+### Deployment
+
+For deployment, make sure to configure the appropriate settings for your production environment, including database settings, security settings, and environment variables. Consider using a platform-as-a-service (PaaS) provider such as Heroku or AWS Elastic Beanstalk for easy deployment and scalability.
+
+Feel free to explore and modify the script according to your needs. This project was created for Sweeft acceleration project (II stage) by Mariam Kalmakhelidze.
