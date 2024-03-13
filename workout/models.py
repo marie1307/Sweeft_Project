@@ -80,3 +80,43 @@ class PersonalGoal(models.Model):
 
     def __str__(self):
         return f"{self.goal} - {self.user.username}"
+
+
+# Track workouts / information about completed workouts
+class CompletedWorkout(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='completed_workouts')
+    personal_plan = models.ForeignKey(PersonalPlan, on_delete=models.CASCADE, related_name='completed_sessions')
+    date_completed = models.DateField(auto_now_add=True)
+    notes = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.date_completed} - {self.user.username}"
+
+# Feedback after exercise including rating and notes
+class ExerciseFeedback(models.Model):
+    RATING_CHOICES = [
+        ('1', '1'),
+        ('2', '2'),
+        ('3', '3'),
+        ('4', '4'),
+        ('5', '5'),
+    ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='exercise_feedback')
+    exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE, related_name='feedback')
+    rating = models.IntegerField(default = 0, choices=RATING_CHOICES)
+    comments = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.exercise.title} - {self.user.username} Feedback"
+
+
+# Workout Session detailed information according to persinal plan
+class WorkoutSession(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='workout_sessions')
+    personal_plan = models.ForeignKey(PersonalPlan, on_delete=models.CASCADE)
+    start_time = models.DateTimeField(auto_now_add=True)
+    end_time = models.DateTimeField(null=True, blank=True)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"Session for {self.user.username} on {self.start_time.strftime('%Y-%m-%d')}"

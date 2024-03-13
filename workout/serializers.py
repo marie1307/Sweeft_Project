@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Exercise, PersonalPlan, PersonalPlanExercise, PersonalGoal
+from .models import Exercise, PersonalPlan, PersonalPlanExercise, PersonalGoal, CompletedWorkout, ExerciseFeedback, WorkoutSession
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -62,3 +62,24 @@ class PersonalGoalSerializer(serializers.ModelSerializer):
     class Meta:
         model = PersonalGoal
         fields = "__all__"
+
+
+class CompletedWorkoutSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CompletedWorkout
+        fields = '__all__'
+        read_only_fields = ('user',)
+
+
+class ExerciseFeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExerciseFeedback
+        fields = '__all__'
+        read_only_fields = ('user',)
+
+
+class WorkoutSessionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkoutSession
+        fields = '__all__'
+        read_only_fields = ('user', 'start_time', 'active',)

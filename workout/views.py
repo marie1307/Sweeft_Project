@@ -2,8 +2,8 @@ from rest_framework import generics, viewsets, status
 from rest_framework.response import Response
 from django.contrib.auth import login, logout
 from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import RegistrationSerializer, LoginSerializer, ExerciseSerializer, PersonalPlanExercise, PersonalPlanExerciseSerializer, PersonalGoalSerializer
-from .models import Exercise, PersonalPlan, PersonalPlanExercise, PersonalGoal
+from .serializers import RegistrationSerializer, LoginSerializer, ExerciseSerializer, PersonalPlanExercise, PersonalPlanExerciseSerializer, PersonalGoalSerializer, CompletedWorkoutSerializer, ExerciseFeedbackSerializer, WorkoutSessionSerializer
+from .models import Exercise, PersonalPlan, PersonalPlanExercise, PersonalGoal, CompletedWorkout, ExerciseFeedback, WorkoutSession
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 
@@ -49,7 +49,7 @@ class ExercisesViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-# General personal plan only for user
+# General personal plan only for authenticated user
 class PersonalPlanViewSet(viewsets.ModelViewSet):
     queryset = PersonalPlan.objects.all()
     serializer_class = PersonalPlanExercise
@@ -63,7 +63,7 @@ class PersonalPlanViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-# Personal plan per exercises only for user
+# Personal plan per exercises only for authenticated user
 class PersonalPlanExerciseViewSet(viewsets.ModelViewSet):
     queryset = PersonalPlanExercise.objects.all()
     serializer_class = PersonalPlanExerciseSerializer
@@ -77,7 +77,7 @@ class PersonalPlanExerciseViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-# Personal goals track only for user
+# Personal goals track only for authenticated user
 class PersonalGoalViewSet(viewsets.ModelViewSet):
     queryset = PersonalGoal.objects.all()
     serializer_class = PersonalGoalSerializer
@@ -89,3 +89,42 @@ class PersonalGoalViewSet(viewsets.ModelViewSet):
         if user and not user.is_anonymous:
             queryset = queryset.filter(user=user)
         return queryset
+    
+
+# Complete workout allowed only for authenticated user
+class CompletedWorkoutViewSet(viewsets.ModelViewSet):
+    queryset = CompletedWorkout.objects.all()
+    serializer_class = CompletedWorkoutSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return CompletedWorkout.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+# Exercise Feedback allowed only for authenticated user
+class ExerciseFeedbackViewSet(viewsets.ModelViewSet):
+    queryset = ExerciseFeedback.objects.all()
+    serializer_class = ExerciseFeedbackSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return ExerciseFeedback.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+# Workout session information allowed only for authenticated user
+class WorkoutSessionViewSet(viewsets.ModelViewSet):
+    queryset = WorkoutSession.objects.all()
+    serializer_class = WorkoutSessionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return WorkoutSession.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
